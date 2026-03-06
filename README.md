@@ -1,4 +1,4 @@
-rom flask import Flask, render_template_string, request, redirect, Response
+from flask import Flask, render_template_string, request, redirect, Response
 import cv2, threading, time, os, datetime
 import speech_recognition as sr
 import pyttsx3
