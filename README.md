@@ -6,7 +6,7 @@ from PyPDF2 import PdfReader
  
 app = Flask(__name__)
  
-# ================= GLOBAL STATE =================
+# GLOBAL STATE 
 screening_active = False
 latest_transcript = "Waiting for response..."
 answers = []
@@ -23,20 +23,20 @@ user_profile = {}
 video_writer = None
 video_filename = None
  
-# ================= CAMERA GLOBAL =================
+#  CAMERA GLOBAL 
 camera = cv2.VideoCapture(0)
  
-# ================= CREATE RECORDINGS DIR =================
+#  CREATE RECORDINGS DIR
 if not os.path.exists("recordings"):
   os.mkdir("recordings")
  
-# ================= TTS =================
+#  TTS 
 engine = pyttsx3.init()
 def speak(text):
    engine.say(text)
   engine.runAndWait()
  
-# ================= STT =================
+#  STT 
 def listen_voice():
    global latest_transcript
    r = sr.Recognizer()
