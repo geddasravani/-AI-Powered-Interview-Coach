@@ -55,7 +55,7 @@ def listen_voice():
        except:
            pass
  
-# ================= CAMERA =================
+# CAMERA 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades+"haarcascade_frontalface_default.xml")
 smile_cascade = cv2.CascadeClassifier(cv2.data.haarcascades+"haarcascade_smile.xml")
  
@@ -129,7 +129,7 @@ def gen_frames():
 def video_feed():
    return Response(gen_frames(),mimetype="multipart/x-mixed-replace; boundary=frame")
  
-# ================= INTERVIEW FLOW =================
+# INTERVIEW FLOW 
 def interview_flow():
    global current_question, screening_active, latest_transcript
  
@@ -159,7 +159,7 @@ def next_question():
   threading.Thread(target=speak, args=(questions[current_question],), daemon=True).start()
    return redirect("/screening")
  
-# ================= UI BASE =================
+# UI BASE 
 BASE_HTML="""
 <!DOCTYPE html>
 <html>
@@ -198,7 +198,7 @@ background:#2563eb;color:white;font-size:16px;cursor:pointer}
 </html>
 """
  
-# ================= HOME =================
+#  HOME 
 @app.route("/")
 def home():
    return render_template_string(BASE_HTML,content="""
@@ -208,7 +208,7 @@ def home():
    </div>
   """)
  
-# ================= PROFILE =================
+#  PROFILE 
 def extract_text_from_pdf(file):
   reader=PdfReader(file)
    return "".join(page.extract_text() for page in reader.pages if page.extract_text())
@@ -236,7 +236,7 @@ def profile():
    </form>
   """)
  
-# ================= DASHBOARD =================
+#  DASHBOARD 
 @app.route("/dashboard")
 def dashboard():
    return render_template_string(BASE_HTML,content="""
@@ -245,7 +245,7 @@ def dashboard():
    <a href="/start"><button class="green">Start Screening</button></a>
   """)
  
-# ================= START =================
+#  START 
 @app.route("/start")
 def start():
    global screening_active,current_question,answers,video_writer,video_filename
@@ -260,8 +260,7 @@ def start():
   video_writer=cv2.VideoWriter(video_filename,fourcc,20.0,(640,480))
  
    return redirect("/screening")
- 
-# ================= STOP =================
+ # STOP 
 @app.route("/stop")
 def stop():
    global screening_active,video_writer
@@ -271,7 +270,7 @@ def stop():
       video_writer=None
    return redirect("/feedback")
  
-# ================= SCREENING =================
+# SCREENING
 @app.route("/screening")
 def screening():
   q=questions[current_question]
@@ -307,13 +306,13 @@ def screening():
    </div>
   """)
  
-# ================= FEEDBACK =================
+#  FEEDBACK 
 @app.route("/feedback")
 def feedback():
  
   qa="".join(f"<li><b>{a['question']}</b><br>{a['answer']}</li>" for a in answers)
  
-   # -------- ANALYSIS SCORES --------
+   #  ANALYSIS SCORES
    confidence = int((confidence_score/frames_count)*100) if frames_count else 0
    smile = int((smile_score/frames_count)*100) if frames_count else 0
    communication = min(100,len(" ".join(a["answer"] for a in answers))*2)
@@ -356,11 +355,11 @@ def feedback():
    </div>
   """)
  
-# ================= THREAD START =================
+#  THREAD START
 threading.Thread(target=listen_voice,daemon=True).start()
 threading.Thread(target=interview_flow,daemon=True).start()
  
-# ================= RUN =================
+#  RUN 
 if __name__=="__main__":
   app.run(debug=True)
   powershell: pip install flask opencv-python pyttsx3 SpeechRecognition pdfplumber pyaudio
